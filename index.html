@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Andy Ferns - GitHub Projects</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="script.js" defer></script>
+</head>
+<body>
+
+    <header class="container">
+        <div class="header-content">
+            <h1>AndyFerns</h1>
+            <p class="subtitle">My GitHub Projects</p>
+        </div>
+        <button id="theme-toggle" aria-label="Toggle dark mode">
+            </button>
+    </header>
+
+    <main class="container">
+        <section id="projects-container" aria-live="polite">
+            <p id="loading-state">Loading projects...</p>
+        </section>
+        
+        <div id="error-container" role="alert" aria-live="assertive"></div>
+    </main>
+
+    <footer class="container">
+        <p>
+            Powered by the <a href="https://docs.github.com/en/rest" target="_blank" rel="noopener noreferrer">GitHub REST API</a>.
+        </p>
+    </footer>
+
+</body>
+</html>

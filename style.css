@@ -1,0 +1,194 @@
+/* --- 1. Global Setup & Color Palette --- */
+
+:root {
+    /* Your provided color palette */
+    --saddle-brown: #7b3e19;
+    --light-bronze: #d6a184;
+    --blue-slate: #5d737e;
+    --frosted-mint: #eaf9d9;
+    --tea-green: #c4f1be;
+
+    /* Define light theme variables */
+    --bg-color: var(--frosted-mint);
+    --text-color: var(--blue-slate);
+    --heading-color: var(--saddle-brown);
+    --card-bg: #ffffff;
+    --card-border: var(--tea-green);
+    --link-color: var(--saddle-brown);
+    --accent-color: var(--light-bronze);
+    --toggle-icon: '🌙'; /* Moon for dark mode */
+}
+
+/* =========================================
+== THIS IS THE UPDATED "DARKER" THEME ===
+=========================================
+*/
+[data-theme="dark"] {
+    --bg-color: #22282a; /* Much darker background */
+    --text-color: #eaf2e6; /* Brighter text for contrast */
+    --heading-color: var(--tea-green);
+    --card-bg: #333a3d;  /* Darker card background */
+    --card-border: #444c50; /* Subtle border for the darker card */
+    --link-color: var(--tea-green);
+    --accent-color: var(--light-bronze);
+    --toggle-icon: '☀️'; /* Sun for light mode */
+}
+/* =========================================
+== END OF UPDATED THEME ===================
+========================================= */
+
+
+/* --- 2. Base Styles --- */
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+        Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    line-height: 1.6;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+h1, h2, h3 {
+    color: var(--heading-color);
+    margin-bottom: 0.5rem;
+    line-height: 1.2;
+}
+
+a {
+    color: var(--link-color);
+    text-decoration: none;
+    font-weight: 600;
+    transition: opacity 0.2s ease;
+}
+
+a:hover {
+    text-decoration: underline;
+    opacity: 0.8;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 1.5rem;
+}
+
+/* --- 3. Header & Theme Toggle --- */
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid var(--card-border);
+}
+
+.subtitle {
+    font-size: 1.1rem;
+    font-style: italic;
+}
+
+#theme-toggle {
+    font-size: 1.5rem; /* Makes the emoji icon larger */
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.5rem;
+    border-radius: 50%;
+    transition: background-color 0.2s ease;
+}
+
+#theme-toggle:hover {
+    background-color: rgba(255, 255, 255, 0.1); /* Adjusted for dark bg */
+}
+
+#theme-toggle::before {
+    content: var(--toggle-icon);
+    display: inline-block;
+}
+
+/* --- 4. Project Grid & Cards --- */
+
+#projects-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+    padding-top: 1.5rem;
+}
+
+.project-card {
+    background-color: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 8px;
+    padding: 1.5rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Shadow is more subtle now */
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.project-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+}
+
+.project-card h3 {
+    font-size: 1.25rem;
+}
+
+.project-card p {
+    font-size: 0.95rem;
+    flex-grow: 1; /* Ensures card footer aligns */
+    margin-bottom: 1rem;
+}
+
+.project-card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 1rem; /* Ensures space from description */
+    font-size: 0.9rem;
+}
+
+.project-language {
+    background-color: var(--accent-color);
+    color: var(--saddle-brown);
+    padding: 0.25rem 0.6rem;
+    border-radius: 12px;
+    font-weight: 700;
+}
+
+/* --- 5. Loading & Error States --- */
+
+#loading-state {
+    font-size: 1.2rem;
+    font-style: italic;
+    grid-column: 1 / -1; /* Span full grid */
+    text-align: center;
+}
+
+#error-container {
+    padding: 1rem 1.5rem;
+    margin-top: 1.5rem;
+    background-color: #ffddd; /* Light red */
+    color: #8b0000; /* Dark red */
+    border: 1px solid #ffc0cb; /* Pink */
+    border-radius: 8px;
+}
+
+/* --- 6. Footer --- */
+
+footer {
+    text-align: center;
+    margin-top: 2rem;
+    padding-top: 1rem;
+    border-top: 2px solid var(--card-border);
+    font-size: 0.9rem;
+}
