@@ -3,13 +3,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- 1. GitHub API Configuration ---
     const USERNAME = 'AndyFerns';
-    const API_URL = `https://api.github.com/users/${USERNAME}/repos?sort=updated&direction=desc`;
 
     // --- 2. DOM Element Selection ---
     const projectsContainer = document.getElementById('projects-container');
-    const loadingState = document.getElementById('loading-state');
     const errorContainer = document.getElementById('error-container');
     const themeToggle = document.getElementById('theme-toggle');
+    const sortSelect = document.getElementById('sort-select'); // New element
 
     // --- 3. Theme Toggling Logic ---
     
@@ -31,21 +30,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Check for saved theme in localStorage
     const savedTheme = localStorage.getItem('theme');
-    
-    // Check for user's OS preference
     const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
 
-    // Initialize theme:
-    // 1. Use saved theme if it exists.
-    // 2. Else, use OS preference.
-    // 3. Else, default to light.
     if (savedTheme) {
         setTheme(savedTheme);
     } else {
         setTheme(prefersDark ? 'dark' : 'light');
     }
 
-    // Add click event for the toggle button
     themeToggle.addEventListener('click', () => {
         const currentTheme = document.documentElement.getAttribute('data-theme');
         setTheme(currentTheme === 'dark' ? 'light' : 'dark');
@@ -54,13 +46,44 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- 4. API Data Fetching & Display ---
 
     /**
-     * Fetches and displays GitHub projects.
+     * Shows or hides the loading state in the projects container.
+     * @param {boolean} isLoading - True to show loading, false to clear.
      */
-    async function fetchProjects() {
+    function showLoading(isLoading) {
+        if (isLoading) {
+            projectsContainer.innerHTML = '<p id="loading-state">Loading projects...</p>';
+        } else {
+            const loadingEl = document.getElementById('loading-state');
+            if (loadingEl) {
+                loadingEl.remove();
+            }
+        }
+    }
+    
+    /**
+     * Displays an error message in the error container.
+     * @param {string} message - The error message to display.
+     */
+    function displayError(message) {
+        errorContainer.innerHTML = `<p>${message}</p>`;
+    }
+
+    /**
+     * Fetches and displays GitHub projects, sorted by a given parameter.
+     * @param {string} sortBy - The sort parameter (e.g., 'updated', 'created').
+     */
+    async function fetchProjects(sortBy = 'updated') {
+        showLoading(true); // Show loading state
+        errorContainer.innerHTML = ''; // Clear previous errors
+
+        // Determine sort direction
+        // 'full_name' is alphabetical (asc), others are chronological (desc)
+        const direction = (sortBy === 'full_name') ? 'asc' : 'desc';
+        const API_URL = `https://api.github.com/users/${USERNAME}/repos?sort=${sortBy}&direction=${direction}`;
+
         try {
             const response = await fetch(API_URL);
 
-            // Handle HTTP errors
             if (!response.ok) {
                 let errorMessage = `HTTP Error: ${response.status}`;
                 if (response.status === 403) {
@@ -72,35 +95,38 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             const projects = await response.json();
+            
+            showLoading(false); // Hide loading message
 
-            // Hide the loading message
-            if (loadingState) {
-                loadingState.style.display = 'none';
-            }
-
-            // Handle case where user has no repositories
             if (projects.length === 0) {
                 projectsContainer.innerHTML = '<p>No public repositories found.</p>';
                 return;
             }
 
-            // Clear container (in case loading state was there)
+            // Clear container before adding new cards
             projectsContainer.innerHTML = '';
             
-            // Create and append a card for each project
             projects.forEach(project => {
                 const projectCard = document.createElement('article');
                 projectCard.className = 'project-card';
 
-                // Use defensive coding for potentially null fields
                 const description = project.description || 'No description provided.';
                 const language = project.language || 'N/A';
 
+                // UPDATED: Added star and fork counts
                 projectCard.innerHTML = `
                     <h3>${project.name}</h3>
                     <p>${description}</p>
                     <div class="project-card-footer">
-                        <span class="project-language">${language}</span>
+                        <div class="project-details">
+                            <span class="project-language">${language}</span>
+                            <span class="project-stat" title="Stars">
+                                ⭐ ${project.stargazers_count}
+                            </span>
+                            <span class="project-stat" title="Forks">
+                                🍴 ${project.forks_count}
+                            </span>
+                        </div>
                         <a href="${project.html_url}" target="_blank" rel="noopener noreferrer" class="project-link">
                             View on GitHub
                         </a>
@@ -110,28 +136,21 @@ document.addEventListener('DOMContentLoaded', () => {
             });
 
         } catch (error) {
-            // Handle network errors or errors thrown from the try block
             console.error('Failed to fetch projects:', error);
-            
-            // Hide loading state
-            if (loadingState) {
-                loadingState.style.display = 'none';
-            }
-            
-            // Display error message to the user
+            showLoading(false); // Hide loading on error
             displayError(error.message || 'Network error. Please check your connection.');
         }
     }
 
-    /**
-     * Displays an error message in the error container.
-     * @param {string} message - The error message to display.
-     */
-    function displayError(message) {
-        errorContainer.innerHTML = `<p>${message}</p>`;
-    }
+    // --- 5. Initial Call & Event Listeners ---
+    
+    // NEW: Add change event for the sort dropdown
+    sortSelect.addEventListener('change', (e) => {
+        fetchProjects(e.target.value);
+    });
 
-    // --- 5. Initial Call ---
-    fetchProjects();
+    // Initial project fetch on page load
+    // This will use the default selected value from the HTML ('updated')
+    fetchProjects(sortSelect.value);
 
 });
