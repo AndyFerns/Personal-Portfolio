@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Andy Ferns - GitHub Projects</title>
+    <title>AndyFerns - GitHub Projects</title>
     <link rel="stylesheet" href="style.css">
     <script src="script.js" defer></script>
 </head>
@@ -19,9 +19,18 @@
     </header>
 
     <main class="container">
+        <div class="sort-controls">
+            <label for="sort-select">Sort projects by:</label>
+            <select id="sort-select">
+                <option value="updated" selected>Last Updated</option>
+                <option value="created">Recently Created</option>
+                <option value="pushed">Last Pushed</option>
+                <option value="full_name">Name (A-Z)</option>
+            </select>
+        </div>
+
         <section id="projects-container" aria-live="polite">
-            <p id="loading-state">Loading projects...</p>
-        </section>
+            </section>
         
         <div id="error-container" role="alert" aria-live="assertive"></div>
     </main>
