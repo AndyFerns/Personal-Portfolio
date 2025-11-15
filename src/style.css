@@ -19,12 +19,8 @@
     --toggle-icon: '🌙'; /* Moon for dark mode */
 }
 
-/* =========================================
-== THIS IS THE UPDATED "DARKER" THEME ===
-=========================================
-*/
 [data-theme="dark"] {
-    --bg-color: #22282a; /* Much darker background */
+    --bg-color: #22282a; /* Darker background */
     --text-color: #eaf2e6; /* Brighter text for contrast */
     --heading-color: var(--tea-green);
     --card-bg: #333a3d;  /* Darker card background */
@@ -33,9 +29,6 @@
     --accent-color: var(--light-bronze);
     --toggle-icon: '☀️'; /* Sun for light mode */
 }
-/* =========================================
-== END OF UPDATED THEME ===================
-========================================= */
 
 
 /* --- 2. Base Styles --- */
@@ -95,7 +88,7 @@ header {
 }
 
 #theme-toggle {
-    font-size: 1.5rem; /* Makes the emoji icon larger */
+    font-size: 1.5rem;
     background: none;
     border: none;
     cursor: pointer;
@@ -105,7 +98,7 @@ header {
 }
 
 #theme-toggle:hover {
-    background-color: rgba(255, 255, 255, 0.1); /* Adjusted for dark bg */
+    background-color: rgba(255, 255, 255, 0.1);
 }
 
 #theme-toggle::before {
@@ -113,13 +106,37 @@ header {
     display: inline-block;
 }
 
-/* --- 4. Project Grid & Cards --- */
+/* --- 4. NEW: Sort Controls --- */
+
+.sort-controls {
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.sort-controls label {
+    font-weight: 600;
+    color: var(--heading-color);
+}
+
+#sort-select {
+    font-size: 0.9rem;
+    padding: 0.3rem 0.5rem;
+    border-radius: 6px;
+    border: 1px solid var(--card-border);
+    background-color: var(--card-bg);
+    color: var(--text-color);
+    cursor: pointer;
+}
+
+/* --- 5. Project Grid & Cards --- */
 
 #projects-container {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     gap: 1.5rem;
-    padding-top: 1.5rem;
+    min-height: 100px; /* Prevents layout jump during loading */
 }
 
 .project-card {
@@ -127,7 +144,7 @@ header {
     border: 1px solid var(--card-border);
     border-radius: 8px;
     padding: 1.5rem;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Shadow is more subtle now */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     transition: transform 0.2s ease, box-shadow 0.2s ease;
     display: flex;
     flex-direction: column;
@@ -145,16 +162,33 @@ header {
 
 .project-card p {
     font-size: 0.95rem;
-    flex-grow: 1; /* Ensures card footer aligns */
+    flex-grow: 1;
     margin-bottom: 1rem;
 }
 
+/* UPDATED: Footer layout for stats */
 .project-card-footer {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-top: 1rem; /* Ensures space from description */
+    margin-top: 1rem;
     font-size: 0.9rem;
+    flex-wrap: wrap; /* Allows wrapping on small cards */
+    gap: 1rem;
+}
+
+/* NEW: Container for language and stats */
+.project-details {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.project-details span {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
 }
 
 .project-language {
@@ -165,25 +199,31 @@ header {
     font-weight: 700;
 }
 
-/* --- 5. Loading & Error States --- */
+/* NEW: Style for star and fork stats */
+.project-stat {
+    font-weight: 600;
+}
+
+/* --- 6. Loading & Error States --- */
 
 #loading-state {
     font-size: 1.2rem;
     font-style: italic;
     grid-column: 1 / -1; /* Span full grid */
     text-align: center;
+    padding: 2rem 0;
 }
 
 #error-container {
     padding: 1rem 1.5rem;
     margin-top: 1.5rem;
-    background-color: #ffddd; /* Light red */
-    color: #8b0000; /* Dark red */
-    border: 1px solid #ffc0cb; /* Pink */
+    background-color: #ffddd;
+    color: #8b0000;
+    border: 1px solid #ffc0cb;
     border-radius: 8px;
 }
 
-/* --- 6. Footer --- */
+/* --- 7. Footer --- */
 
 footer {
     text-align: center;
